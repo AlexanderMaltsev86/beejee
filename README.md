@@ -1,4 +1,4 @@
-###### Test project for BeeJee.
+## Test project for BeeJee.
 The following entities has been added:
 1. Controllers: `TaskController`, `LoginController`, `ErrorController`. 
 2. Models: base `Model` class, `Task` and `User`.
@@ -10,7 +10,7 @@ The following entities has been added:
 8. `DI` - simple dependency injection implementation. Currently used to store configuration, `UriResolver` and `RequestContext`.
 9. `Application` - entry point called in `public/index.php` file. Used to move application logic from `index.php` file.
 
-###### Database configuration
+## Database configuration
 Change database config in `config/database.php` file and run this SQL code to your database:
 ```
  create table tasks
