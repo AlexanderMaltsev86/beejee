@@ -1,0 +1,82 @@
+<h1 class="mt-2">Tasks</h1>
+<div class="add-button">
+    <a href="<?php echo $view->getPath('/tasks/form') ?>" class="btn btn-primary">Add task</a>
+</div>
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item<?php if ($page == 1) { echo ' disabled'; } ?>">
+            <a class="page-link" href="<?php echo $view->getPath('/?page=' . ($page-1) . ($order ? "&order=$order&direction=$direction" : '')); ?>" tabindex="-1" aria-disabled="true">
+                Previous
+            </a>
+        </li>
+        <?php for ($ind = 0; $ind < $pagesCount; $ind++) { ?>
+            <li class="page-item<?php if ($page == ($ind+1)) { echo ' active'; } ?>">
+                <a class="page-link" href="<?php echo $view->getPath('/?page=' . ($ind+1) . ($order ? "&order=$order&direction=$direction" : '')); ?>">
+                    <?php echo $ind+1; ?>
+                </a>
+            </li>
+        <?php } ?>
+        <li class="page-item<?php if ($page >= $pagesCount) { echo ' disabled'; } ?>">
+            <a class="page-link" href="<?php echo $view->getPath('/?page=' . ($page+1) . ($order ? "&order=$order&direction=$direction" : '')); ?>">
+                Next
+            </a>
+        </li>
+    </ul>
+</nav>
+<?php if ($action === 'added') { ?>
+    <div class="alert alert-success alert-dismissible fade show">
+        Task added
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php } ?>
+<?php if (!is_array($tasks) || count($tasks) === 0) { ?>
+    <p>No tasks found.</p>
+<?php } else { ?>
+    <table class="table table-responsive">
+        <tr>
+            <th>
+                <a href="<?php echo $view->getPath("/?page=$page&order=completed&direction=" . ($order !== 'completed' || $direction === 'desc' ? 'asc' : 'desc') ) ?>">Completed</a>
+                <?php if ($order === 'completed') { $view->include('components/order_direction', [ 'direction' => $direction ]); } ?>
+            </th>
+            <th>
+                <a href="<?php echo $view->getPath("/?page=$page&order=name&direction=" . ($order !== 'name' || $direction === 'desc' ? 'asc' : 'desc')) ?>">Name</a>
+                <?php if ($order === 'name') { $view->include('components/order_direction', [ 'direction' => $direction ]); } ?>
+            </th>
+            <th>
+                <a href="<?php echo $view->getPath("/?page=$page&order=email&direction=" . ($order !== 'email' || $direction === 'desc' ? 'asc' : 'desc')) ?>">Email</a>
+                <?php if ($order === 'email') { $view->include('components/order_direction', [ 'direction' => $direction ]); } ?>
+            </th>
+            <th>Text</th>
+            <?php if ($requestContext->getVariable('user')) { ?>
+                <th></th>
+            <?php } ?>
+        </tr>
+        <?php foreach ($tasks as $task) { ?>
+            <tr <?php if ($task->completed) { echo 'class="completed-task"'; }?>>
+                <td>
+                    <?php if ($task->completed) {?>
+                        <i class="fa fa-check-circle"></i> Complete
+                    <?php } else { ?>
+                        In progress
+                    <?php } ?>
+                </td>
+                <td><?php echo htmlentities($task->name); ?></td>
+                <td><?php echo htmlentities($task->email); ?></td>
+                <td>
+                    <?php echo htmlentities($task->text); ?>
+                    <?php if ($task->updated_by) { ?>
+                        <br><small>Updated by <?php echo $task->updated_by ?></small>
+                    <?php } ?>
+                </td>
+                <?php if ($requestContext->getVariable('user')) { ?>
+                    <td class="control-cell">
+                        <a href="<?php echo $view->getPath('/tasks/form?id=' . $task->id . '&page=' . $page . ($order ? "&order=$order&direction=$direction" : '')) ?>" class="btn btn-outline-primary btn-sm">Edit</a>
+                        <a href="<?php echo $view->getPath('/tasks/delete?id=' . $task->id . '&page=' . $page . ($order ? "&order=$order&direction=$direction" : '')) ?>" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+                <?php } ?>
+            </tr>
+        <?php } ?>
+    </table>
+<?php } ?>

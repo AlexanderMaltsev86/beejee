@@ -1,0 +1,7 @@
+<h1 class="mt-5">Unexpected error</h1>
+<div class="alert alert-danger">
+    <p><?php echo $view->get('exceptionClass'); ?></p>
+    <p><?php echo $view->get('message'); ?></p>
+    <pre><?php echo $view->get('file') . ":" . $view->get('line'); ?><br><?php echo $view->get('stackTrace'); ?></pre>
+</div>
+
